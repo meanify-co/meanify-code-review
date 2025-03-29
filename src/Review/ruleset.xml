@@ -1,5 +1,4 @@
 <?xml version="1.0"?>
 <ruleset name="Review">
     <description>Meanify custom coding standard.</description>
-    <rule ref="Review.NamingConventions.ValidVariableName"/>
 </ruleset>

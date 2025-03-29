@@ -4,102 +4,222 @@
   </a>
 </p>
 
-# Meanify Code Review
+# 📘 Meanify Code Review
 
-This package provides a centralized code review standard for all Meanify projects. It includes:
+Meanify Code Review is a reusable package that unifies PHP code quality tools for Laravel and general PHP projects.
 
-- ✅ Laravel Pint
-- ✅ PHP_CodeSniffer (PHPCS)
-- ✅ PHPStan
-- ✅ PHPArkitect
+It includes:
+- [Laravel Pint](https://laravel.com/docs/12.x/pint)
+- [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
+- [PHPArkitect](https://github.com/phparkitect/arkitect)
+- Custom Meanify Sniffs and Architecture rules
 
 ---
 
-## 🚀 Installation
+## 🧩 Installation
 
-In your project:
+```bash
+composer require meanify-co/meanify-code-review --dev --prefer-source -W
+vendor/bin/phpcs --config-set installed_paths vendor/meanify-co/meanify-code-review/src
+vendor/bin/phpcs -i  # confirm "Meanify" is listed
+```
 
-1. Add the repository to `composer.json`:
+---
 
-```json
-"repositories": [
-  {
-    "type": "vcs",
-    "url": "git@github.com:meanify/code-review.git"
-  }
+## 🚀 Usage
+
+```bash
+vendor/meanify-co/meanify-code-review/run.sh
+```
+
+---
+
+## ✅ Rules and Examples
+
+### 🔡 Variable Naming
+
+- Static properties must use `UPPER_SNAKE_CASE`:
+
+```php
+public static $MAX_ATTEMPTS;
+```
+
+- Non-static variables must use `lower_snake_case`:
+
+```php
+$max_attempts;
+```
+
+---
+
+### 🏗 Architecture Rules (PHPArkitect)
+
+- Classes inside `App\Http\Controllers` must end with `Controller`:
+
+```php
+namespace App\Http\Controllers;
+
+class UserController {}
+```
+
+- Classes inside `App\Http\Locators` must end with `Locator`:
+
+```php
+namespace App\Http\Locators;
+
+class AdminLocator {}
+```
+
+- Classes inside `App\Services` must end with `Service`:
+
+```php
+namespace App\Services;
+
+class UserService {}
+```
+
+- Classes inside `App\Jobs` must end with `Job`:
+
+```php
+namespace App\Jobs;
+
+class SendEmailJob {}
+```
+
+- Classes inside `App\Console\Commands` must end with `Command`:
+
+```php
+namespace App\Console\Commands;
+
+class SyncDataCommand {}
+```
+
+---
+
+### ✅ Code Style Rules (Pint + PHPCS)
+
+- Indentation must use tabs.
+- Arrays must use short syntax:
+
+```php
+$array = ['a', 'b'];
+```
+
+- Binary operators must be aligned:
+
+```php
+$total   = 100;
+$tax     = 25;
+$grand   = $total + $tax;
+```
+
+- No trailing commas in multi-line arrays:
+
+```php
+[
+    'first',
+    'second'
 ]
 ```
 
-2. Require it as dev dependency:
+- Enforced order and no unused imports:
 
-```bash
-composer require meanify/code-review --dev
+```php
+use App\Service;
+use Illuminate\Support\Str;
 ```
 
----
+- Always single quotes for strings unless interpolation or escaping required:
 
-## 🛠 Usage
-
-From your project root, run:
-
-```bash
-/vendor/meanify-co/meanify-code-review/run.sh
+```php
+$message = 'Welcome back';
 ```
 
+- Add blank lines before statements (except `return` if configured).
+- Braces are compact:
+
+```php
+if ($x) {
+    doSomething();
+}
+```
+
+- Multiline function args:
+
+```php
+function example(
+    string $a,
+    int $b
+) {}
+```
+
+- PHPDoc is ordered, aligned, indented and trimmed:
+
+```php
+/**
+ * @param string $name
+ * @param int    $age
+ */
+```
+
+- No superfluous PHPDoc tags:
+
+```php
+/** @return void */ // ← Removed if redundant
+```
+
+- Single space after semicolon:
+
+```php
+for ($i = 0; $i < 10; $i++) {}
+```
+
+- `cast` spacing:
+
+```php
+(string) $value;
+```
+
+- One attribute per line:
+
+```php
+private string $name;
+private int $age;
+```
+
+- One trait per statement:
+
+```php
+use HasUuid;
+```
+
+- Namespace must be separated by a blank line before and after:
+
+```php
+<?php
+
+namespace App\Example;
+
+class Something {}
+```
+
+- Use `self::` instead of `$this->` when calling static.
+
+- Use `!=` instead of `<>`.
+
+- Avoid:
+    - redundant `else`
+    - empty `return`
+    - unnecessary `elseif` and curly braces
+    - null property initialization
+    - unnecessary control structure parentheses
+
+- Always use explicit visibility (`public`, `protected`, `private`).
+- Force one class per file.
+
 ---
 
-## ✅ Rules Included
 
-### 🔹 Laravel Pint
+## 🧠 About
 
-| Rule                             | Description                                      | Example (✅ Good / ❌ Bad)                              |
-|----------------------------------|--------------------------------------------------|--------------------------------------------------------|
-| `indent`                         | Use tab indentation                              | ✅ `\tfoo()`<br>❌ `    foo()`                          |
-| `array_syntax`                   | Short syntax arrays                              | ✅ `[1, 2]`<br>❌ `array(1, 2)`                         |
-| `binary_operator_spaces`         | Align equals/operators                           | ✅ `foo  = 1;`<br>❌ `foo =  1;`                        |
-| `trailing_comma_in_multiline`   | No trailing comma in multi-line                  | ✅ `[1, 2]`<br>❌ `[1, 2, ]`                            |
-| `ordered_imports`               | Sort `use` statements alphabetically             | ✅ `use A; use B;`<br>❌ `use B; use A;`               |
-| `single_quote`                  | Use single quotes                                | ✅ `'text'`<br>❌ `"text"`                             |
-| `braces`                        | Compact braces style                             | ✅ `if ($x) {}`<br>❌ `if ($x) 
-| `method_argument_space`         | One arg per line in multi-line calls             | ✅ `foo(
-| `phpdoc_trim`                   | Remove empty lines in PHPDoc                     | ✅ `/** Foo */`<br>❌ `/**\n * Foo\n */`              |
-
-### 🔹 PHP_CodeSniffer
-
-| Rule                                        | Description                                            | Example (✅ Good / ❌ Bad)                              |
-|---------------------------------------------|--------------------------------------------------------|--------------------------------------------------------|
-| Static property naming                     | Must be UPPER_SNAKE_CASE                               | ✅ `static $MAX_SIZE`<br>❌ `static $maxSize`          |
-| Variable naming                            | Must be lower_snake_case                               | ✅ `$user_name`<br>❌ `$userName`                      |
-| One class per file                         | Only one class/interface/trait per file                | ✅ `class A {}`<br>❌ `class A {} class B {}`          |
-| Disallowed functions                       | Ban `sizeof`, `print`, `die`, etc.                     | ✅ `count()`<br>❌ `sizeof()`                          |
-| Max line length                            | Max 120 characters per line                            | ✅ `echo "text";`<br>❌ very long line exceeding limit |
-| Short array syntax                         | Enforce `[]` instead of `array()`                      | ✅ `[1, 2]`<br>❌ `array(1, 2)`                         |
-| Cast/Operator spacing                      | Enforce space after cast and around operators          | ✅ `(int) $a + 1`<br>❌ `(int)$a+1`                    |
-| One argument per line                      | For multi-line function calls                          | ✅ `foo(
-| No underscore prefix for private members   | No `_` for private props or methods                    | ✅ `$value`<br>❌ `$_value`                            |
-
-### 🔹 PHPArkitect
-
-| Rule                         | Description                                                   |
-|------------------------------|---------------------------------------------------------------|
-| Controllers naming           | Must reside in `App\Http\Controllers` and end with `Controller` |
-| Locators naming              | Must reside in `App\Http\Locators` and end with `Locator`       |
-| Services naming              | Must reside in `App\Services` and end with `Service`            |
-| Jobs naming                  | Must reside in `App\Jobs` and end with `Job`                    |
-| Commands naming              | Must reside in `App\Console\Commands` and end with `Command`    |
-| Domain isolation             | `App\Domain` classes must not depend on external namespaces     |
-
----
-
-## 👨‍💻 Contributing
-
-You can extend this package by:
-- Adding new sniffs in `src/Review/Sniffs/`
-- Updating Pint or PHPStan config files
-- Proposing new architectural rules
-
----
-
-## 📄 License
-
-MIT
+Developed and maintained by [Meanify](https://meanify.co) — Software with Purpose.

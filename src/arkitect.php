@@ -10,7 +10,7 @@ use Arkitect\Expression\ForClasses\ResideInOneOfTheseNamespaces;
 use Arkitect\Rules\Rule;
 
 return static function (Config $config): void {
-    $appSet = ClassSet::fromDir(__DIR__ . '/../app');
+    $appSet = ClassSet::fromDir(__DIR__ . '/../../../../app');
 
     $rules = [];
 

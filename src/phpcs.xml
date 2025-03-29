@@ -6,22 +6,22 @@
     <!-- Paths to analyses Standards -->
     <!-- ........................................................................................................... -->
 
-    <file>../app</file>
-    <file>../config</file>
-    <file>../routes</file>
-    <file>../tests</file>
+    <file>../../../../app</file>
+    <file>../../../../config</file>
+    <file>../../../../routes</file>
+    <file>../../../../tests</file>
 
 
     <!-- ........................................................................................................... -->
     <!-- Ignore paths  -->
     <!-- ........................................................................................................... -->
 
-    <exclude-pattern>../node_modules/*</exclude-pattern>
-    <exclude-pattern>../vendor/*</exclude-pattern>
-    <exclude-pattern>../tests/Feature/*</exclude-pattern>
-    <exclude-pattern>../tests/Unit/*</exclude-pattern>
-    <exclude-pattern>../storage/*</exclude-pattern>
-    <exclude-pattern>../bootstrap/cache/*</exclude-pattern>
+    <exclude-pattern>../../../../node_modules/*</exclude-pattern>
+    <exclude-pattern>../../../../vendor/*</exclude-pattern>
+    <exclude-pattern>../../../../tests/Feature/*</exclude-pattern>
+    <exclude-pattern>../../../../tests/Unit/*</exclude-pattern>
+    <exclude-pattern>../../../../storage/*</exclude-pattern>
+    <exclude-pattern>../../../../bootstrap/cache/*</exclude-pattern>
 
 
     <!-- ........................................................................................................... -->
@@ -44,6 +44,8 @@
         <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine"/>
         <exclude name="PEAR.WhiteSpace.ScopeClosingBrace.Line"/>
         <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment"/>
+        <exclude name="PEAR.Commenting.FunctionComment.Missing"/>
+        <exclude name="PEAR.Commenting.FunctionComment.MissingReturn"/>
     </rule>
 
 
@@ -77,7 +79,9 @@
     <rule ref="Generic.WhiteSpace.SpreadOperatorSpacingAfter" />
 
     <!-- NamingConventions -->
-    <rule ref="Generic.NamingConventions" />
+    <rule ref="Generic.NamingConventions">
+        <exclude name="Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps"/>
+    </rule>
 
     <!-- Set constant with uppercase -->
     <rule ref="Generic.PHP.LowerCaseConstant"/>

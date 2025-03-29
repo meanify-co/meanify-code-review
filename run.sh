@@ -15,7 +15,7 @@ RED="\033[0;31m"
 NC="\033[0m"
 
 divider() {
-    echo -e "${YELLOW}--------------------------------------------------${NC}"
+    echo -e "${YELLOW}-------------------------------------------------------------------------------${NC}"
 }
 
 section() {
@@ -39,10 +39,13 @@ section "Running Laravel Pint"
 "${BIN}/pint" --config "${BASH_SOURCE%/*}/src/pint.json" || fail "Laravel Pint"
 finish "Laravel Pint"
 
+
 # PHP CodeSniffer
 section "Running PHP CodeSniffer"
+"${BIN}/phpcs" --config-set installed_paths "${BASH_SOURCE%/*}/src/"
 "${BIN}/phpcs" --colors -s --standard="${BASH_SOURCE%/*}/src/phpcs.xml" || fail "PHP CodeSniffer"
 finish "PHP CodeSniffer"
+
 
 # PHPArkitect
 section "Running PHPArkitect"
