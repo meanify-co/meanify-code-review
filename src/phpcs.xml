@@ -36,12 +36,16 @@
 
     <rule ref="PEAR">
         <!-- Ignore rules -->
+        <exclude name="PEAR.Functions.FunctionCallSignature.Indent"/>
+        <exclude name="PEAR.ControlStructures.ControlSignature.Found"/>
+        <exclude name="PEAR.ControlStructures.MultiLineCondition.NewlineBeforeOpenBrace"/>
         <exclude name="PEAR.Commenting.ClassComment"/>
         <exclude name="PEAR.Commenting.InlineComment"/>
         <exclude name="PEAR.Commenting.FileComment.Missing"/>
         <exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"/>
         <exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine"/>
         <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnSameLine"/>
+        <exclude name="PEAR.Functions.FunctionDeclaration.BraceOnNewLine"/>
         <exclude name="PEAR.WhiteSpace.ScopeClosingBrace.Line"/>
         <exclude name="PEAR.Commenting.FunctionComment.MissingParamComment"/>
         <exclude name="PEAR.Commenting.FunctionComment.Missing"/>
@@ -83,6 +87,12 @@
         <exclude name="Generic.NamingConventions.CamelCapsFunctionName.ScopeNotCamelCaps"/>
     </rule>
 
+    <!-- Functions -->
+    <rule ref="Generic.Functions">
+        <exclude name="Generic.Functions.OpeningFunctionBraceBsdAllman.BraceOnSameLine"/>
+        <exclude name="Generic.Functions.OpeningFunctionBraceKernighanRitchie.BraceOnNewLine"/>
+    </rule>
+
     <!-- Set constant with uppercase -->
     <rule ref="Generic.PHP.LowerCaseConstant"/>
 
@@ -116,6 +126,7 @@
     <!-- Doc comment -->
     <rule ref="Generic.Commenting.DocComment">
         <exclude name="Generic.Commenting.DocComment.MissingShort"/>
+        <exclude name="Generic.Commenting.DocComment.TagValueIndent"/>
     </rule>
 
 

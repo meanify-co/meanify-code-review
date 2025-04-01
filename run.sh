@@ -43,7 +43,7 @@ finish "Laravel Pint"
 # PHP CodeSniffer
 section "Running PHP CodeSniffer"
 "${BIN}/phpcs" --config-set installed_paths "${BASH_SOURCE%/*}/src/"
-"${BIN}/phpcs" --colors -s --standard="${BASH_SOURCE%/*}/src/phpcs.xml" || fail "PHP CodeSniffer"
+"${BIN}/phpcs" --colors -s --standard="${BASH_SOURCE%/*}/src/phpcs.xml" --report=summary || fail "PHP CodeSniffer"
 finish "PHP CodeSniffer"
 
 

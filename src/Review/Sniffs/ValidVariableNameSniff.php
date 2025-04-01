@@ -23,34 +23,54 @@ class ValidVariableNameSniff implements Sniff
      */
     public function process(File $phpcsFile, $stackPtr): void
     {
-        $tokens  = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $varName = ltrim($tokens[$stackPtr]['content'], '$');
 
-        // Detect scope: is it a property?
-        $isStatic   = false;
-        $conditions = $tokens[$stackPtr]['conditions'] ?? [];
+        // Verifica se o token é uma propriedade de classe (não é uma variável comum nem uso de self::$var)
+        $isProperty = false;
+        for ($i = $stackPtr; $i >= 0; $i--) {
+            if ($tokens[$i]['code'] === T_CLASS || $tokens[$i]['code'] === T_TRAIT) {
+                break;
+            }
 
-        foreach (array_reverse($conditions) as $ptr => $type) {
-            if (in_array($type, [T_CLASS, T_TRAIT])) {
-                // Look backward to find if it's declared as static
-                for ($i = $stackPtr - 1; $i > $ptr; $i--) {
-                    if ($tokens[$i]['code'] === T_STATIC) {
-                        $isStatic = true;
+            if ($tokens[$i]['code'] === T_VARIABLE && $i !== $stackPtr) {
+                // Encontramos outra variável antes: não é declaração de propriedade
+                return;
+            }
 
-                        break;
-                    }
+            if (in_array($tokens[$i]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_STATIC])) {
+                $isProperty = true;
+            }
 
-                    if ($tokens[$i]['code'] === T_FUNCTION || $tokens[$i]['code'] === T_VARIABLE) {
-                        break;
-                    }
-                }
+            if ($tokens[$i]['code'] === T_FUNCTION) {
+                // Estamos dentro de uma função, logo não é declaração de propriedade
+                return;
+            }
 
+            // Parar no ponto em que abrimos a classe
+            if ($tokens[$i]['code'] === T_OPEN_CURLY_BRACKET) {
+                break;
+            }
+        }
+
+        if (! $isProperty) {
+            return;
+        }
+
+        // Verifica se a propriedade é estática
+        $isStatic = false;
+        for ($i = $stackPtr - 1; $i >= 0; $i--) {
+            if ($tokens[$i]['code'] === T_STATIC) {
+                $isStatic = true;
+                break;
+            }
+
+            if (in_array($tokens[$i]['code'], [T_PUBLIC, T_PROTECTED, T_PRIVATE, T_VAR, T_FUNCTION])) {
                 break;
             }
         }
 
         if ($isStatic) {
-            // Static property: must be UPPER_SNAKE_CASE
             if (! preg_match('/^[A-Z][A-Z0-9_]*$/', $varName)) {
                 $phpcsFile->addError(
                     "Static property \${$varName} must be in UPPER_SNAKE_CASE.",
@@ -59,7 +79,6 @@ class ValidVariableNameSniff implements Sniff
                 );
             }
         } else {
-            // Other variables: must be lower_snake_case
             if (! preg_match('/^[a-z][a-z0-9_]*$/', $varName)) {
                 $phpcsFile->addError(
                     "Variable \${$varName} must be in lower_snake_case.",
@@ -69,4 +88,5 @@ class ValidVariableNameSniff implements Sniff
             }
         }
     }
+
 }

@@ -47,7 +47,22 @@
         "while"
       ]
     },
-    "braces": true,
+    "braces": {
+      "allow_single_line_anonymous_class_with_empty_body": true,
+      "allow_single_line_closure": true,
+      "position_after_control_structures": "next",
+      "position_after_functions_and_oop_constructs": "next",
+      "position_after_anonymous_constructs": "next"
+    },
+    "curly_braces_position": {
+      "control_structures_opening_brace": "next_line_unless_newline_at_signature_end",
+      "functions_opening_brace": "next_line_unless_newline_at_signature_end",
+      "anonymous_functions_opening_brace": "next_line_unless_newline_at_signature_end",
+      "classes_opening_brace": "next_line_unless_newline_at_signature_end",
+      "anonymous_classes_opening_brace": "next_line_unless_newline_at_signature_end",
+      "allow_single_line_empty_anonymous_classes": true,
+      "allow_single_line_anonymous_functions": true
+    },
     "method_argument_space": {
       "on_multiline": "ensure_fully_multiline"
     },
@@ -86,7 +101,7 @@
     "nullable_type_declaration_for_default_null_value": true,
     "lambda_not_used_import": true,
     "blank_line_after_namespace": true,
-    "blank_line_after_opening_tag": false,
+    "blank_line_after_opening_tag": true,
     "no_trailing_whitespace": true,
     "combine_consecutive_issets": true,
     "phpdoc_to_comment": false,
